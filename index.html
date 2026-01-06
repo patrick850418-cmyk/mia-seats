@@ -8,48 +8,47 @@
         /* 基礎佈局 */
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f4f7f6; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* 主要內容區 */
-        .main-content { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        .main-content { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
         
-        /* 側邊欄（管理員專用） */
+        /* 管理員側邊欄 */
         .sidebar { width: 320px; background: white; border-left: 2px solid #ddd; padding: 20px; display: none; flex-direction: column; overflow-y: auto; box-shadow: -2px 0 10px rgba(0,0,0,0.1); }
         .admin-active .sidebar { display: flex; }
 
-        /* 滑動容器 */
+        /* --- 核心修正：確保最左側可見 --- */
         .venue-wrapper {
             width: 100%;
-            overflow-x: auto;
-            display: block; /* 讓它在手機上能自由滾動 */
-            padding: 20px 0;
+            overflow-x: auto; /* 開啟左右滑動 */
             -webkit-overflow-scrolling: touch;
+            padding: 20px 0;
+            display: block; /* 改為 block 確保捲軸正常工作 */
         }
 
         .stage-area { 
-            width: 1000px; /* 固定寬度確保手機不會縮小座位 */
+            width: 1100px; /* 增加寬度，確保最左與最右都有空間 */
             margin: 0 auto;
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            padding: 0 50px; /* 預留邊緣空間 */
         }
         
-        /* 圖例說明 */
-        .legend-area { display: flex; gap: 15px; margin-bottom: 20px; font-size: 13px; color: #444; background: #fff; padding: 10px 20px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        /* 舞台與圖例 */
+        .legend-area { display: flex; gap: 15px; margin-bottom: 15px; font-size: 13px; background: #fff; padding: 10px 20px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .legend-box { width: 14px; height: 14px; border-radius: 3px; border: 1px solid #ccc; }
-
-        .screen { background: #333; width: 450px; margin: 0 auto 30px; padding: 10px; color: #fff; border-radius: 0 0 50px 50px; font-weight: bold; letter-spacing: 10px; text-align: center; }
+        .screen { background: #333; width: 450px; margin-bottom: 30px; padding: 10px; color: #fff; border-radius: 0 0 50px 50px; font-weight: bold; letter-spacing: 10px; text-align: center; }
         
+        /* 座位排列 */
         .venue-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
         .block { display: flex; flex-direction: column; gap: 5px; }
         .row { display: flex; gap: 3px; height: 32px; align-items: center; }
-        
         .left-side .row { justify-content: flex-end; }
         .middle-side .row { justify-content: center; }
         .right-side .row { justify-content: flex-start; }
 
+        /* 座位樣式 */
         .seat { width: 32px; height: 32px; font-size: 10px; border-radius: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; font-weight: bold; background: #fff; box-sizing: border-box; }
         .admin-active .seat { cursor: pointer; }
-        
         .available { background-color: #fff; color: #333; }
         .sold { background-color: #ff6b6b !important; color: #fff !important; border-color: #ee5253; }
         .selected { border: 2px solid #ffca28 !important; background-color: #fffde7; }
@@ -57,58 +56,41 @@
         .camera-seat::after { content: "×"; font-size: 18px; }
         .pr-seat { border: 2px solid #007bff !important; color: #007bff; background-color: #f0f7ff; }
 
-        /* --- 還原截圖中的資訊方塊樣式 --- */
-        .info-card {
-            background-color: #ebedef;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        .info-card::before {
-            content: "";
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 6px;
-        }
+        /* 資訊方塊 (還原樣式) */
+        .info-card { background-color: #ebedef; border-radius: 12px; padding: 15px 20px; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .info-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; }
         .card-blue::before { background-color: #007bff; }
         .card-red::before { background-color: #dc3545; }
-
-        .card-label { font-size: 14px; color: #666; margin-bottom: 5px; }
+        .card-label { font-size: 14px; color: #666; }
         .card-value { font-size: 24px; font-weight: bold; color: #007bff; }
-        .card-title-red { font-size: 20px; font-weight: bold; color: #dc3545; margin-bottom: 10px; }
-        .card-detail-item { font-size: 16px; margin-bottom: 8px; color: #333; line-height: 1.5; }
+        .card-detail-item { font-size: 16px; margin-bottom: 8px; line-height: 1.5; }
 
-        /* 手機滑動提示圖示 */
-        .scroll-hint { display: none; color: #007bff; font-size: 12px; margin-bottom: 10px; }
+        /* 手機滑動提示 */
+        .scroll-hint { color: #007bff; font-size: 13px; font-weight: bold; margin-bottom: 5px; display: none; }
         @media (max-width: 768px) { .scroll-hint { display: block; } }
 
-        /* 表單按鈕 */
+        /* 管理員與表單 */
         .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
         .btn-sell { background: #28a745; color: white; }
         .btn-refund { background: #dc3545; color: white; }
         .btn-export { background: #6c757d; color: white; font-size: 13px; margin-top: 20px; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        label { font-weight: bold; margin-top: 10px; display: block; color: #555; }
-
-        .admin-entry-btn { margin: 40px 0; padding: 10px 20px; background: #eee; border: 1px solid #ccc; border-radius: 5px; color: #777; font-size: 12px; cursor: pointer; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; }
+        .admin-entry-btn { margin: 30px 0; padding: 10px 20px; background: #eee; border: 1px solid #ccc; border-radius: 5px; color: #777; font-size: 12px; }
         .admin-active .admin-entry-btn { display: none; }
     </style>
 </head>
 <body>
     <div class="main-content">
-        <h1 style="color: #2c3e50; margin-bottom: 15px;">2026 MIA春季成發 即時座位</h1>
+        <h1 style="color: #2c3e50; margin-bottom: 10px;">2026 MIA春季成發 即時座位</h1>
         
         <div class="legend-area">
             <div class="legend-item"><div class="legend-box" style="background:#fff;"></div><span>可選</span></div>
             <div class="legend-item"><div class="legend-box" style="background:#ff6b6b;"></div><span>已售</span></div>
             <div class="legend-item"><div class="legend-box pr-seat"></div><span>公關席</span></div>
-            <div class="legend-item"><div class="legend-box camera-seat" style="display:flex; align-items:center; justify-content:center;"></div><span>攝影席</span></div>
+            <div class="legend-item"><div class="legend-box camera-seat"></div><span>攝影席</span></div>
         </div>
 
-        <div class="scroll-hint">雙指或左右滑動查看完整座位 ➔</div>
+        <div class="scroll-hint">➔ 左右滑動查看完整位置 ➔</div>
 
         <div class="venue-wrapper">
             <div class="stage-area">
@@ -125,13 +107,11 @@
     </div>
 
     <div class="sidebar">
-        <h2 style="margin-top:0;">票務管理中心</h2>
-        
+        <h2>票務管理中心</h2>
         <div class="info-card card-blue">
-            <div class="card-label">目前選中座位：</div>
+            <div class="card-label">目前選中：</div>
             <div id="target-id" class="card-value">請點選座位...</div>
         </div>
-
         <div id="sell-zone">
             <label>購票人姓名</label><input type="text" id="p-name">
             <label>購票人電話</label><input type="text" id="p-phone">
@@ -143,16 +123,14 @@
             <label>備註</label><input type="text" id="p-note">
             <button class="btn btn-sell" id="btn-sell-action">確認劃位售出</button>
         </div>
-
         <div id="info-zone" style="display:none;">
             <div class="info-card card-red">
-                <div class="card-title-red">已售出資訊：</div>
+                <div style="font-weight:bold; color:#dc3545; margin-bottom:10px;">已售出資訊：</div>
                 <div id="sold-detail"></div>
             </div>
             <button class="btn btn-refund" id="btn-refund-action">取消售出 (退票)</button>
         </div>
-        
-        <button class="btn btn-export" id="btn-export-action">📥 匯出售票名冊 (CSV)</button>
+        <button class="btn btn-export" id="btn-export-action">📥 匯出 CSV 名冊</button>
     </div>
 
     <script type="module">
@@ -171,7 +149,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
         let isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
         if(isAdmin) document.body.classList.add('admin-active');
 
@@ -180,7 +157,7 @@
             if(pw === "mia2026") {
                 isAdmin = true;
                 document.body.classList.add('admin-active');
-                alert("已成功切換至管理員模式");
+                alert("已切換至管理模式");
             } else if(pw !== null) { alert("密碼錯誤"); }
         };
 
@@ -246,22 +223,14 @@
                 selectedIds = [id];
                 document.getElementById('sell-zone').style.display = 'none';
                 document.getElementById('info-zone').style.display = 'block';
-                document.getElementById('sold-detail').innerHTML = `
-                    <div class="card-detail-item"><b>購票人：</b>${currentSeat.name || '無'}</div>
-                    <div class="card-detail-item"><b>電話：</b>${currentSeat.phone || '無'}</div>
-                    <div class="card-detail-item"><b>日期：</b>${currentSeat.date || '無'}</div>
-                    <div class="card-detail-item"><b>售票員：</b>${currentSeat.staff || '無'}</div>
-                    <div class="card-detail-item"><b>備註：</b>${currentSeat.note || '無'}</div>
-                `;
+                document.getElementById('sold-detail').innerHTML = `<div class="card-detail-item"><b>購票人：</b>${currentSeat.name}</div><div class="card-detail-item"><b>電話：</b>${currentSeat.phone}</div><div class="card-detail-item"><b>售票員：</b>${currentSeat.staff}</div>`;
             } else {
                 document.getElementById('sell-zone').style.display = 'block';
                 document.getElementById('info-zone').style.display = 'none';
-                if (selectedIds.includes(id)) {
-                    selectedIds = selectedIds.filter(i => i !== id);
-                } else {
+                if (selectedIds.includes(id)) selectedIds = selectedIds.filter(i => i !== id);
+                else {
                     if(selectedIds.length === 1 && seatsData[selectedIds[0]]?.status === 'sold') selectedIds = [id];
                     else if(selectedIds.length < 5) selectedIds.push(id);
-                    else alert("一次最多劃位 5 張票！");
                 }
             }
             document.getElementById('target-id').innerText = selectedIds.length > 0 ? selectedIds.join(', ') : "請點選座位...";
@@ -270,31 +239,23 @@
 
         document.getElementById('btn-sell-action').onclick = () => {
             const staff = document.getElementById('p-staff').value;
-            if(!staff || selectedIds.length === 0) return alert("請選擇售票人員與座位！");
+            if(!staff || selectedIds.length === 0) return alert("請選擇人員與座位");
             const updates = {};
             selectedIds.forEach(id => {
-                updates[`seats/${id}`] = { 
-                    status: 'sold', 
-                    name: document.getElementById('p-name').value, 
-                    phone: document.getElementById('p-phone').value, 
-                    date: document.getElementById('p-date').value, 
-                    staff: staff, 
-                    note: document.getElementById('p-note').value 
-                };
+                updates[`seats/${id}`] = { status: 'sold', name: document.getElementById('p-name').value, phone: document.getElementById('p-phone').value, date: document.getElementById('p-date').value, staff: staff, note: document.getElementById('p-note').value };
             });
             update(ref(db), updates).then(() => {
                 selectedIds = [];
-                document.getElementById('p-name').value = ''; document.getElementById('p-phone').value = ''; document.getElementById('p-note').value = '';
+                document.getElementById('p-name').value = '';
+                document.getElementById('p-phone').value = '';
                 document.getElementById('target-id').innerText = "請點選座位...";
             });
         };
 
         document.getElementById('btn-refund-action').onclick = () => {
-            if(confirm("確定要取消此座位的售出狀態（退票）嗎？")) {
-                const id = selectedIds[0];
-                update(ref(db, `seats/${id}`), { status: 'available', name: null, phone: null, date: null, staff: null, note: null }).then(() => {
+            if(confirm("確定退票？")) {
+                update(ref(db, `seats/${selectedIds[0]}`), { status: 'available', name: null, phone: null, date: null, staff: null, note: null }).then(() => {
                     selectedIds = [];
-                    document.getElementById('target-id').innerText = "請點選座位...";
                     document.getElementById('info-zone').style.display = 'none';
                     document.getElementById('sell-zone').style.display = 'block';
                 });
@@ -302,15 +263,15 @@
         };
 
         document.getElementById('btn-export-action').onclick = () => {
-            let csv = "\uFEFF座位,購票人,電話,日期,售票員,備註\n";
+            let csv = "\uFEFF座位,購票人,電話,日期,售票員\n";
             Object.keys(seatsData).forEach(id => {
                 const s = seatsData[id];
-                if(s.status === 'sold') csv += `${id},${s.name || ''},${s.phone || ''},${s.date || ''},${s.staff || ''},${s.note || ''}\n`;
+                if(s.status === 'sold') csv += `${id},${s.name},${s.phone},${s.date},${s.staff}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `MIA名冊_${new Date().toLocaleDateString()}.csv`;
+            a.download = `MIA名冊.csv`;
             a.click();
         };
     </script>
