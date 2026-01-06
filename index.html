@@ -10,26 +10,35 @@
         .sidebar { width: 320px; background: white; border-left: 2px solid #ddd; padding: 20px; display: none; flex-direction: column; overflow-y: auto; box-shadow: -2px 0 10px rgba(0,0,0,0.1); }
         .admin-active .sidebar { display: flex; }
 
-        /* 核心修正：強制從左側對齊，確保 A1 不被吃掉 */
+        /* 標題樣式調整 */
+        .title-container { text-align: center; margin-bottom: 10px; line-height: 1.2; }
+        .title-top { font-size: 20px; color: #2c3e50; font-weight: bold; }
+        .title-bottom { font-size: 18px; color: #2c3e50; font-weight: bold; }
+        @media (max-width: 768px) {
+            .title-top { font-size: 18px; }
+            .title-bottom { font-size: 16px; }
+        }
+
+        /* 核心修正：讓電腦版置中，手機版可完整滑動 */
         .venue-wrapper {
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             padding: 20px 0;
-            display: block;
-            text-align: left; /* 強制靠左 */
+            display: block; 
         }
 
         .stage-area { 
-            width: 1100px; 
-            margin: 0; /* 取消置中，確保左側對齊螢幕邊緣 */
+            width: fit-content; /* 根據內容自動撐開 */
+            min-width: 1150px; /* 確保內容不會縮在一起 */
+            margin: 0 auto; /* 這行讓電腦版置中 */
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding-left: 20px; /* 留一點點左邊邊距 */
+            padding: 0 40px; /* 左右各留緩衝，解決 A/B 欄看不到的問題 */
         }
         
-        .legend-area { display: flex; gap: 15px; margin-bottom: 15px; font-size: 13px; background: #fff; padding: 10px 20px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .legend-area { display: flex; gap: 10px; margin-bottom: 15px; font-size: 12px; background: #fff; padding: 8px 15px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex-wrap: wrap; justify-content: center; }
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .legend-box { width: 14px; height: 14px; border-radius: 3px; border: 1px solid #ccc; }
         .screen { background: #333; width: 450px; margin-bottom: 30px; padding: 10px; color: #fff; border-radius: 0 0 50px 50px; font-weight: bold; letter-spacing: 10px; text-align: center; }
@@ -57,7 +66,6 @@
         .card-value { font-size: 24px; font-weight: bold; color: #007bff; }
         .card-detail-item { font-size: 16px; margin-bottom: 8px; line-height: 1.5; }
 
-        /* 更新提示文字樣式 */
         .scroll-hint { color: #d32f2f; font-size: 14px; font-weight: bold; margin-bottom: 10px; display: none; background: #ffebee; padding: 5px 15px; border-radius: 15px; }
         @media (max-width: 768px) { .scroll-hint { display: block; } }
 
@@ -72,7 +80,11 @@
 </head>
 <body>
     <div class="main-content">
-        <h1 style="color: #2c3e50; margin-bottom: 10px;">2026 MIA春季成發 即時座位</h1>
+        <div class="title-container">
+            <div class="title-top">2026 8th MIA SPRING SHOW</div>
+            <div class="title-bottom">即時座位</div>
+        </div>
+
         <div class="legend-area">
             <div class="legend-item"><div class="legend-box" style="background:#fff;"></div><span>可選</span></div>
             <div class="legend-item"><div class="legend-box" style="background:#ff6b6b;"></div><span>已售</span></div>
