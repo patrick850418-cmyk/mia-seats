@@ -10,7 +10,6 @@
         .sidebar { width: 320px; background: white; border-left: 2px solid #ddd; padding: 20px; display: none; flex-direction: column; overflow-y: auto; box-shadow: -2px 0 10px rgba(0,0,0,0.1); }
         .admin-active .sidebar { display: flex; }
 
-        /* 標題樣式調整 */
         .title-container { text-align: center; margin-bottom: 10px; line-height: 1.2; }
         .title-top { font-size: 20px; color: #2c3e50; font-weight: bold; }
         .title-bottom { font-size: 18px; color: #2c3e50; font-weight: bold; }
@@ -19,24 +18,8 @@
             .title-bottom { font-size: 16px; }
         }
 
-        /* 核心修正：讓電腦版置中，手機版可完整滑動 */
-        .venue-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 20px 0;
-            display: block; 
-        }
-
-        .stage-area { 
-            width: fit-content; /* 根據內容自動撐開 */
-            min-width: 1150px; /* 確保內容不會縮在一起 */
-            margin: 0 auto; /* 這行讓電腦版置中 */
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 0 40px; /* 左右各留緩衝，解決 A/B 欄看不到的問題 */
-        }
+        .venue-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 20px 0; display: block; }
+        .stage-area { width: fit-content; min-width: 1150px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding: 0 40px; }
         
         .legend-area { display: flex; gap: 10px; margin-bottom: 15px; font-size: 12px; background: #fff; padding: 8px 15px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex-wrap: wrap; justify-content: center; }
         .legend-item { display: flex; align-items: center; gap: 5px; }
@@ -54,9 +37,13 @@
         .admin-active .seat { cursor: pointer; }
         .available { background-color: #fff; color: #333; }
         .sold { background-color: #ff6b6b !important; color: #fff !important; border-color: #ee5253; }
-        .selected { border: 2px solid #ffca28 !important; background-color: #fffde7; }
-        .camera-seat { background: #e0e0e0 !important; color: #999 !important; border: 1px dashed #bbb !important; }
-        .camera-seat::after { content: "×"; font-size: 18px; }
+        
+        /* 選取狀態：改為鮮豔橘色，確保公關席也明顯 */
+        .selected { border: 3px solid #ff9800 !important; background-color: #fff3e0 !important; z-index: 10; }
+        
+        /* 攝影席：移除 X 符號 */
+        .camera-seat { background: #9e9e9e !important; color: #fff !important; border: 1px solid #757575 !important; }
+        
         .pr-seat { border: 2px solid #007bff !important; color: #007bff; background-color: #f0f7ff; }
 
         .info-card { background-color: #ebedef; border-radius: 12px; padding: 15px 20px; margin-bottom: 15px; position: relative; overflow: hidden; }
@@ -64,7 +51,8 @@
         .card-blue::before { background-color: #007bff; }
         .card-red::before { background-color: #dc3545; }
         .card-value { font-size: 24px; font-weight: bold; color: #007bff; }
-        .card-detail-item { font-size: 16px; margin-bottom: 8px; line-height: 1.5; }
+        .card-detail-item { font-size: 15px; margin-bottom: 6px; line-height: 1.4; color: #333; border-bottom: 1px solid #dee2e6; padding-bottom: 4px; }
+        .card-detail-item b { color: #555; display: inline-block; width: 85px; }
 
         .scroll-hint { color: #d32f2f; font-size: 14px; font-weight: bold; margin-bottom: 10px; display: none; background: #ffebee; padding: 5px 15px; border-radius: 15px; }
         @media (max-width: 768px) { .scroll-hint { display: block; } }
@@ -73,9 +61,8 @@
         .btn-sell { background: #28a745; color: white; }
         .btn-refund { background: #dc3545; color: white; }
         .btn-export { background: #6c757d; color: white; font-size: 13px; margin-top: 20px; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
         .admin-entry-btn { margin: 30px 0; padding: 10px 20px; background: #eee; border: 1px solid #ccc; border-radius: 5px; color: #777; font-size: 12px; }
-        .admin-active .admin-entry-btn { display: none; }
     </style>
 </head>
 <body>
@@ -217,7 +204,14 @@
                 selectedIds = [id];
                 document.getElementById('sell-zone').style.display = 'none';
                 document.getElementById('info-zone').style.display = 'block';
-                document.getElementById('sold-detail').innerHTML = `<div class="card-detail-item"><b>購票人：</b>${currentSeat.name}</div><div class="card-detail-item"><b>電話：</b>${currentSeat.phone}</div><div class="card-detail-item"><b>售票員：</b>${currentSeat.staff}</div>`;
+                // 顯示資訊統一對齊
+                document.getElementById('sold-detail').innerHTML = `
+                    <div class="card-detail-item"><b>購票人姓名</b>${currentSeat.name || '-'}</div>
+                    <div class="card-detail-item"><b>購票人電話</b>${currentSeat.phone || '-'}</div>
+                    <div class="card-detail-item"><b>付款日期</b>${currentSeat.date || '-'}</div>
+                    <div class="card-detail-item"><b>售票人員</b>${currentSeat.staff || '-'}</div>
+                    <div class="card-detail-item"><b>備註</b>${currentSeat.note || '-'}</div>
+                `;
             } else {
                 document.getElementById('sell-zone').style.display = 'block';
                 document.getElementById('info-zone').style.display = 'none';
@@ -236,12 +230,20 @@
             if(!staff || selectedIds.length === 0) return alert("請選擇人員與座位");
             const updates = {};
             selectedIds.forEach(id => {
-                updates[`seats/${id}`] = { status: 'sold', name: document.getElementById('p-name').value, phone: document.getElementById('p-phone').value, date: document.getElementById('p-date').value, staff: staff, note: document.getElementById('p-note').value };
+                updates[`seats/${id}`] = { 
+                    status: 'sold', 
+                    name: document.getElementById('p-name').value, 
+                    phone: document.getElementById('p-phone').value, 
+                    date: document.getElementById('p-date').value, 
+                    staff: staff, 
+                    note: document.getElementById('p-note').value 
+                };
             });
             update(ref(db), updates).then(() => {
                 selectedIds = [];
                 document.getElementById('p-name').value = '';
                 document.getElementById('p-phone').value = '';
+                document.getElementById('p-note').value = '';
                 document.getElementById('target-id').innerText = "請點選座位...";
             });
         };
@@ -257,10 +259,10 @@
         };
 
         document.getElementById('btn-export-action').onclick = () => {
-            let csv = "\uFEFF座位,購票人,電話,日期,售票員\n";
+            let csv = "\uFEFF座位,購票人姓名,購票人電話,付款日期,售票人員,備註\n";
             Object.keys(seatsData).forEach(id => {
                 const s = seatsData[id];
-                if(s.status === 'sold') csv += `${id},${s.name},${s.phone},${s.date},${s.staff}\n`;
+                if(s.status === 'sold') csv += `${id},${s.name},${s.phone},${s.date},${s.staff},${s.note}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const a = document.createElement('a');
